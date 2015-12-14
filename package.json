@@ -1,0 +1,25 @@
+{
+  "name": "shippable-app",
+  "version": "1.0.0",
+  "description": "Demo app for shippable hiring",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://"
+  },
+  "keywords": [
+    "shippable",
+    "github",
+    "issues",
+    "tracker"
+  ],
+  "author": "Akash Kurian Jose",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.13.3",
+    "forever": "^0.15.1"
+  }
+}

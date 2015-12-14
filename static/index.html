@@ -1,0 +1,115 @@
+<html>
+<head>
+	<style type="text/css">
+	.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+#pasteto, #loading{ display: none;
+	margin-top:50px;
+	}
+</style>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+
+</head>
+<body>
+	<div class="container">
+    <h1>Github issues tracker</h1>
+    <p>Paste the repo url to find oppen issues count</p>
+
+
+
+
+    <div class="row ">
+        <div class="col-md-10 col-md-offset-1">
+    		<h2>Custom search field</h2>
+            <div id="custom-search-input">
+                <div class="input-group col-md-12">
+                    <input type="text" class="form-control input-lg" placeholder="Github repo url" id="url"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="button" id="findbtn">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+	</div>
+
+
+
+</div>
+<div class="container" id="loading">Loading...</div>
+<div class="container" id="pasteto">
+
+	<table class="table">
+
+    <tbody>
+      <tr>
+        <td>Number of open issues that were opened in the last 24 hours
+</td>
+        <td id='t24'></td>
+      </tr>
+      <tr>
+        <td>Number of open issues that were opened more than 24 hours ago but less than 7 days ago</td>
+        <td id='t24_7'></td>
+      </tr>
+      <tr>
+        <td>Number of open issues that were opened more than 7 days ago </td>
+        <td id='t7'></td>
+      </tr>
+      <tr style="background:rgb(237, 237, 237)">
+        <td>Total open issues</td>
+        <td id='total'></td>
+      </tr>
+    </tbody>
+  </table>
+	</div>
+
+
+<script type="text/javascript">
+document.getElementById("findbtn").onclick=function(){
+
+	url=document.getElementById("url").value;
+	document.getElementById("pasteto").style.display="";
+	document.getElementById("loading").style.display="block";
+	if(!url) return alert("Please enter a url");
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+
+	  //onreadystatechange event listener callback
+	xmlhttp.onreadystatechange=function(){
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+	    {
+	      document.getElementById("pasteto").style.display="block";
+	document.getElementById("loading").style.display="";
+	      res=JSON.parse(xmlhttp.responseText);
+	      document.getElementById("t24").innerHTML=res.t24h
+	      document.getElementById("t24_7").innerHTML=res.t24h_7d
+	      document.getElementById("t7").innerHTML=res.t7d
+	      document.getElementById("total").innerHTML=res.t7d+ res.t24h_7d+ res.t24h;
+	    }
+	    else if(xmlhttp.status==403)
+	      alert(xmlhttp.responseText);
+
+	    else if(xmlhttp.readyState==4 )
+	      alert("Error occured");
+	}
+	xmlhttp.open("GET","/issues?url="+encodeURIComponent(url),true);
+	xmlhttp.send();
+}
+</script>
+</body>
